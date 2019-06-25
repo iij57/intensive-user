@@ -5,7 +5,7 @@ services:
     image: mariadb
     restart: always
     healthcheck:
-      test: "/usr/bin/mysql --user=svdonation --password=svdonation --execute \"SHOW DATABASES;\""
+      test: "/usr/bin/mysql --user=intensive --password=intensive --execute \"SHOW DATABASES;\""
       # test: "/usr/local/mysql/bin/mysql --user=foo --password=foo --execute \"SHOW DATABASES;\""
       interval: 3s
       timeout: 1s
@@ -15,25 +15,25 @@ services:
     container_name : db
     environment:
       - MYSQL_ROOT_PASSWORD=nexcore
-      - MYSQL_DATABASE=svdonation
-      - MYSQL_USER=svdonation
-      - MYSQL_PASSWORD=svdonation
+      - MYSQL_DATABASE=intensive
+      - MYSQL_USER=intensive
+      - MYSQL_PASSWORD=intensive
       - TZ=Asia/Seoul
     volumes:
-      - /sw/svdonation/mariadb/data:/var/lib/mysql
-      - /sw/svdonation/mariadb/conf.d:/etc/mysql/conf.d
+      - /sw/intensive-user/mariadb/data:/var/lib/mysql
+      - /sw/intensive-user/mariadb/conf.d:/etc/mysql/conf.d
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     
   svdonation:
-    image: solutiondevteam/svdonation
+    image: iij57/intensive-user
     restart: always
-    container_name : svdonation
+    container_name : intensive-user
     environment:
       - MYSQL_URL=db
       - MYSQL_PORT=3306
-      - MYSQL_DATABASE=svdonation
-      - MYSQL_USER=svdonation
-      - MYSQL_PASSWORD=svdonation
+      - MYSQL_DATABASE=intensive
+      - MYSQL_USER=intensive
+      - MYSQL_PASSWORD=intensive
       - TZ=Asia/Seoul
     ports:
       - "8080:8080"
