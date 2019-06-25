@@ -33,10 +33,10 @@ spring:
   profiles: local
   datasource:
     type: com.zaxxer.hikari.HikariDataSource  
-    url: jdbc:mariadb://localhost:3306/svdonation
+    url: jdbc:mariadb://localhost:3306/intensive
     hikari:
-      username: svdonation
-      password: svdonation
+      username: intensive
+      password: intensive
       driver-class-name: org.mariadb.jdbc.Driver
       maximum-pool-size: 10
   jpa: 

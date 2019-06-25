@@ -24,7 +24,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<maven.test.skip>true</maven.test.skip>
-		<start-class>com.sk.svdonation.SVDonationBackend</start-class>
+		<start-class>com.sk.intensive.Intensive</start-class>
 		<swagger.version>2.9.2</swagger.version>
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>yyyy-MM-dd-HH-mm</maven.build.timestamp.format>

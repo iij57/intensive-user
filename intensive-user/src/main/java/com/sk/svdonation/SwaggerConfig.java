@@ -21,15 +21,15 @@ public class SwaggerConfig {
 	    public Docket api() { 
 	        return new Docket(DocumentationType.SWAGGER_2)  
 	          .apiInfo(apiInfo()).select()
-	          .apis(RequestHandlerSelectors.basePackage("com.sk.svdonation.controller"))              
+	          .apis(RequestHandlerSelectors.basePackage("com.sk"))              
 	          .paths(PathSelectors.any())                          
 	          .build();                                           
 	    }
 	   
 	   private ApiInfo apiInfo() {
 	        return new ApiInfoBuilder()
-	                .title("SV Donations Backend API")
-	                .description("SV Donation Backend API를 사용해 봅시다.")
+	                .title("Intensive-USER API")
+	                .description("Intensive-USER API를 사용해 봅시다.")
 	                .build();
 	 
 	    }
