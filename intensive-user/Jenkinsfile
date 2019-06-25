@@ -1,0 +1,121 @@
+/*
+Build Parameter 
+- NODE_NAME : 실행할 노드 이름  
+- BRANCH_NAME : 체크아웃 받을 브랜치명 
+- DATABASE_NAME : DATABASE 명
+- CREDENTIAL_ID : DATABASE 접속 정보 
+*/
+
+node ("'${params.NODE_NAME}'"){
+    def mvnHome
+    def deployPath
+    def backupPath
+
+    def mysqlURL 
+    def mysqlPort 
+    def mysqlDB 
+
+    def currentResult 
+
+   // properties([
+   //    parameters([
+   //       string(defaultValue: 'SV-Connect-WAS-Dev-Slave', description: '실행할 노드 이름 ', name: 'NODE_NAME'),
+   //       string(defaultValue: 'develop', description: '체크아웃 받을 브랜치명 ', name: 'BRANCH_NAME')
+   //       ])
+   // ])    
+
+    try{
+
+        stage('Preparation') { // for display purposes
+            // Get some code from a GitHub repository
+            git credentialsId: 'jenkins-git', branch: "${params.BRANCH_NAME}", url: 'https://git-codecommit.ap-northeast-2.amazonaws.com/v1/repos/sv-donation-backend'
+            // Get the Maven tool.
+            // ** NOTE: This 'M3' Maven tool must be configured
+            // **       in the global configuration.           
+            mvnHome = tool 'Apps-Maven-3.6.1'
+            deployPath = '/apps/was/spring'
+            backupPath = '/apps/was/backup'
+
+            mysqlURL = 'svdonation-db.clbtqa2bnexv.ap-northeast-2.rds.amazonaws.com'
+            mysqlPort = '3306'
+            //mysqlDB = 'svdonation'
+            mysqlDB = "${params.DATABASE_NAME}"            
+        }
+
+        stage('Build') {
+            // Run the maven build
+            sh "'${mvnHome}/bin/mvn' clean package"
+        }
+
+        stage('Backup') {    
+            dir("${deployPath}"){
+                script {
+                    foundFiles = sh(script: 'ls *.jar', returnStdout: true).trim()
+                }
+            }
+            sh "cp ${deployPath}/${foundFiles} ${backupPath}/${foundFiles}.${env.BUILD_TAG}"
+        }
+
+        stage('Deploy') {
+            dir("target"){
+                script {
+                    targetFiles = sh(script: 'ls *.jar', returnStdout: true).trim()
+                }
+            }            
+            sh "cp ./target/${targetFiles} ${deployPath}/"
+        }
+        
+        stage('start') {
+            dir("${deployPath}"){
+
+                try{
+                    sh "pid=\$(lsof -i:8080 -t); kill -TERM \$pid || kill -KILL \$pid"
+                }catch (exc) {
+                    echo("no process or do not kill :" + exc)
+                }
+
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "${params.CREDENTIAL_ID}",
+                usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+
+                    withEnv(['JENKINS_NODE_COOKIE=dontkill']) {
+                    sh " nohup java -Xms1024m -Xmx2048m " +
+                    " -Dspring.profiles.active=dev " + 
+                    " -DMYSQL_URL=${mysqlURL} " + 
+                    " -DMYSQL_PORT=${mysqlPort} " +
+                    " -DMYSQL_DATABASE=${mysqlDB} " +
+                    " -DMYSQL_USER=${env.USERNAME} " +
+                    " -DMYSQL_PASSWORD=${env.PASSWORD} " +
+                    " -jar ${targetFiles} & "
+                    }
+                }
+            }
+        }
+        currentResult = 'SUCCESS'
+    } catch (exec){
+        currentResult = 'FAILURE'
+        echo(" exception : " + exec)
+        throw exec
+    } finally {
+        archiveArtifacts artifacts: 'target/*.jar', onlyIfSuccessful: true, fingerprint: true
+       
+        def color = "good"
+        if(currentResult != "SUCCESS"){
+            color = "bad"
+        }
+
+        def slack_attachments = [
+                [
+                    text: "${currentBuild.fullDisplayName} *${currentResult}* \n  build duration : ${currentBuild.durationString} ",
+                    author_name: "jenkins",
+                    author_link: "http://15.164.49.187:8080",
+                    title: "${currentBuild.fullDisplayName}",
+                    color: "${color}"
+                ]
+            ]
+        try{    
+            slackSend(channel: '#sv-donation-alarm', attachments: slack_attachments)
+        }catch (exec){
+            echo(" exception : " + exec)
+        }
+    }
+}

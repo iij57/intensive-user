@@ -1,0 +1,71 @@
+spring:
+  profiles:
+    active: local
+  output:
+    ansi:
+      enabled: always
+svdonation:
+  kaleido:
+    chainid: "1695806187"
+    user: "k0dueg9m5s"
+    password: "IpydooBlFEk9CbFwAZuEFmgaCKYhAbXCKvlDuoR657U"
+    rpc-endpoint: "https://k0pbnr4wv3-k0q1mh3xdl-rpc.kr0-aws.kaleido.io"
+    privatekey: "ffd4eb3b77d9950f73968ada857bdf19"
+    gasprice: 0
+    gaslimit: 4500000
+    tokenowner: "c0a11e53ad739ebe6ae805f97c75d81bccfc87a7312b526f8f868a84377866fa"
+    address:
+      svc: "0x67a9c64f43b928ea5cc8f9aa93a74b68c7aefc5b"
+      svp: "0xa6Fb1685979a95c81dE65363601F8740F7b8b846"
+  ethqueue:
+    txqueuesize: 10
+    txsendercount: 5
+    receiptqueuesize: 10
+    receiptcrawlercount: 5
+  foundations: 
+    foundation01: "2012에 설립된 사단법인 청춘은 지난 7년 동안 청소년 및 Young Adult 등 따뜻한 손길이 필요한 청춘들을 위해 든든한 지원군이 되어 다양한 캠페인을 펼쳐왔습니다."
+    foundation02: "옥상과 한 뼘 빈터마다 텃밭을 일구고, 탄소연료 대신 태양으로 에너지 자립을 실현하는 도시에서 자전거를 탄 시민들이 금모래 은물결 부서지는 한강으로 강수욕을 떠나는 서울의 미래를 꿈꿉니다."
+    foundation03: "맑은빛맹아원은 시각장애인의 건강한 몸! 즐거운 마음! 당당한 도전! 을 지원합니다."
+    foundation04: "사단법인 한지구는 1990년 라이베리아에서 오랜 내전으로 피폐해진 난민들을 위한 구호활동을 시작으로, 'HOPE=EDUCATION, 교육은 희망입니다.'라는 슬로건으로 아이들을 위한 학교교육과 인성교육 지원에 힘쓰고 있습니다."
+    foundation05: "사단법인 청솔학우는 1997년, 학교폭력의 피해로 외아들을 잃은 아버지가 학교폭력의 심각성을 시민사회에 알리고 학교폭력 예방과 치료를 위한 활동을 목적으로 설립된 청소년 NGO입니다."
+---
+spring:
+  profiles: local
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource  
+    url: jdbc:mariadb://localhost:3306/svdonation
+    hikari:
+      username: svdonation
+      password: svdonation
+      driver-class-name: org.mariadb.jdbc.Driver
+      maximum-pool-size: 10
+  jpa: 
+    generate-ddl: true
+    show-sql: true
+    hibernate: 
+      ddl-auto: create
+      naming: 
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  resources:
+    add-mappings: true
+
+---
+spring:
+  profiles: dev
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mariadb://${MYSQL_URL}:${MYSQL_PORT}/${MYSQL_DATABASE}
+    hikari:
+      username: ${MYSQL_USER}
+      password: ${MYSQL_PASSWORD}
+      driver-class-name: org.mariadb.jdbc.Driver
+      maximum-pool-size: 10
+  jpa: 
+    generate-ddl: true
+    show-sql: true
+    hibernate: 
+      ddl-auto: update
+      naming: 
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  resources:
+    add-mappings: true

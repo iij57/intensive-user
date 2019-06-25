@@ -1,0 +1,41 @@
+version: '3.7'
+ 
+services:
+  db:
+    image: mariadb
+    restart: always
+    healthcheck:
+      test: "/usr/bin/mysql --user=svdonation --password=svdonation --execute \"SHOW DATABASES;\""
+      # test: "/usr/local/mysql/bin/mysql --user=foo --password=foo --execute \"SHOW DATABASES;\""
+      interval: 3s
+      timeout: 1s
+      retries: 5
+    ports:
+      - "3306:3306"
+    container_name : db
+    environment:
+      - MYSQL_ROOT_PASSWORD=nexcore
+      - MYSQL_DATABASE=svdonation
+      - MYSQL_USER=svdonation
+      - MYSQL_PASSWORD=svdonation
+      - TZ=Asia/Seoul
+    volumes:
+      - /sw/svdonation/mariadb/data:/var/lib/mysql
+      - /sw/svdonation/mariadb/conf.d:/etc/mysql/conf.d
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    
+  svdonation:
+    image: solutiondevteam/svdonation
+    restart: always
+    container_name : svdonation
+    environment:
+      - MYSQL_URL=db
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=svdonation
+      - MYSQL_USER=svdonation
+      - MYSQL_PASSWORD=svdonation
+      - TZ=Asia/Seoul
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
