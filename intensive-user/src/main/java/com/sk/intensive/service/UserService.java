@@ -25,7 +25,7 @@ public class UserService {
 		UserEntity userEntity = userRepository.findByUserId(user.getUserId());
 		
 		userEntity.setUserPassword(user.getUserPassword());
-		userEntity.setUsername(user.getUsername());
+		userEntity.setUserName(user.getUserName());
 		userEntity.setUserProfile(user.getUserProfile());
 		
 		userRepository.save(userEntity);

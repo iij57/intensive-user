@@ -19,7 +19,7 @@ public class UserEntity {
 	private String userId;
 	
 	@Column(name = "USER_NAME", length = 100)
-	private String username;
+	private String userName;
 
 	@Column(name = "USER_PASSWORD", length = 100)
 	private String userPassword;
