@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sk.intensive.dto.UserDTO;
 import com.sk.intensive.entity.UserEntity;
 import com.sk.intensive.service.UserService;
 
@@ -25,7 +24,7 @@ public class UserController {
 	private UserService userService;
 	
 	@PostMapping("/v1/users")
-	public void create(@RequestBody UserDTO user) {
+	public void create(@RequestBody UserEntity user) {
 		log.info("Call API UserController.create");
 		userService.create(user);
 	}
@@ -44,13 +43,13 @@ public class UserController {
 	
 	@PutMapping("/v1/users")
 	public void update(@RequestBody UserEntity user) {
-		log.info("Call API UserController.create");
+		log.info("Call API UserController.update");
 		userService.update(user);;
 	}
 	
 	@DeleteMapping("/v1/users/{userId}")
 	public void delete(@PathVariable("userId") String userId){
-		
+		log.info("Call API UserController.delete");
 		userService.delete(userId);
 		
 	}
