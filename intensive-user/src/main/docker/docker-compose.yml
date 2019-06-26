@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.1'
  
 services:
   db-user:
@@ -20,16 +20,16 @@ services:
       - MYSQL_PASSWORD=intensive
       - TZ=Asia/Seoul
     volumes:
-      - /sw/intensive-user/mariadb/data:/var/lib/mysql
-      - /sw/intensive-user/mariadb/conf.d:/etc/mysql/conf.d
+      - /apps/intensive/user/mariadb/data:/var/lib/mysql
+      - /apps/intensive/user/mariadb/conf.d:/etc/mysql/conf.d
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     
   intensive-user:
-    image: iij57/intensive-user
+    image: iij57/intensive-user:1.0
     restart: always
     container_name : intensive-user
     environment:
-      - MYSQL_URL=db
+      - MYSQL_URL=db-user
       - MYSQL_PORT=3306
       - MYSQL_DATABASE=intensive
       - MYSQL_USER=intensive
