@@ -11,4 +11,5 @@ public interface UserRepository extends CrudRepository<UserEntity, String>{
 	UserEntity findByUserId(String userId);
 	
 	List<UserEntity> findAll();
+	
 }

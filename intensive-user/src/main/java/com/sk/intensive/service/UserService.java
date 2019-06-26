@@ -30,6 +30,17 @@ public class UserService {
 		userRepository.save(userEntity);
 	}
 	
+	public void update(UserEntity user) {
+		
+		UserEntity userEntity = userRepository.findByUserId(user.getUserId());
+		
+		userEntity.setUserPassword(user.getUserPassword());
+		userEntity.setUsername(user.getUsername());
+		userEntity.setUserProfile(user.getUserProfile());
+		
+		userRepository.save(userEntity);
+	}
+	
 	public List<UserEntity> getUsers() {
 		
 		log.info("get All Users");
@@ -43,6 +54,14 @@ public class UserService {
 		log.info("get User");
 		
 		return userRepository.findByUserId(userId);
+		
+	}
+	
+	public void delete(String UserId) {
+		
+		UserEntity userEntity = userRepository.findByUserId(UserId);
+		
+		userRepository.delete(userEntity);
 		
 	}
 
