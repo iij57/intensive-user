@@ -14,7 +14,7 @@
             <pattern>![%d] [%-5p] [%-35.35c{1} %L] %m%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./logs/svdonation-application-%d{yyyyMMdd}.log</fileNamePattern>
+            <fileNamePattern>./logs/intensive-application-%d{yyyyMMdd}.log</fileNamePattern>
         </rollingPolicy>
     </appender>
 
@@ -24,7 +24,7 @@
             <pattern>![%d] [%-5p] [%-35.35c{1} %L] %m%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./logs/svdonation-sql-%d{yyyyMMdd}.log</fileNamePattern>
+            <fileNamePattern>./logs/intensive-sql-%d{yyyyMMdd}.log</fileNamePattern>
         </rollingPolicy>
     </appender>
 
