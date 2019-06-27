@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sk.intensive.dto.UserLoginDTO;
 import com.sk.intensive.entity.UserEntity;
 import com.sk.intensive.service.UserService;
 
@@ -22,6 +23,12 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@PostMapping("/v1/login")
+	public String login(@RequestBody UserLoginDTO user) {
+		log.info("Call API UserController.login");
+		return userService.login(user);
+	}
 	
 	@PostMapping("/v1/users")
 	public void create(@RequestBody UserEntity user) {

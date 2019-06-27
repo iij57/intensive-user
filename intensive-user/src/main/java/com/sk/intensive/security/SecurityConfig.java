@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest().permitAll()
 				.and()
 				.formLogin()
-				.loginProcessingUrl("/v1/login")
+				.loginProcessingUrl("/v1/logins")
 				.successHandler(mySuccessHandler)
 				// .failureHandler(myFailureHandler)
 				.and()

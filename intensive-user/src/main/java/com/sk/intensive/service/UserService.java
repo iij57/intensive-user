@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.sk.intensive.dto.UserLoginDTO;
 import com.sk.intensive.entity.UserEntity;
 import com.sk.intensive.repository.UserRepository;
 
@@ -40,6 +41,19 @@ public class UserService {
 		
 		
 		return userRepository.findByUserId(userId);
+		
+	}
+	
+	public String login(UserLoginDTO user) {
+		UserEntity userEntity = userRepository.findByUserId(user.getUserId());
+		
+		if(userEntity == null) {
+			return "no user";
+		}else if(!user.getUserPassword().equals(userEntity.getUserPassword())) {
+			return "check password";
+		}
+			
+		return "success";
 		
 	}
 	
